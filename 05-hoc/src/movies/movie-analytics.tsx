@@ -12,8 +12,10 @@ function MovieAnalytics({ data }: MovieAnalyticsProps) {
       : data.reduce((acc, curr) => acc + curr.rating, 0) / totalMovies
 
   return (
-    <div className='p-4'>
-      <h2 className='text-xl font-bold mb-2'>📊 Movie Analytics</h2>
+    <div className='p-4 border rounded bg-gray-50 max-w-md'>
+      <h2 className='text-xl font-bold mb-2 text-blue-500'>
+        📊 Movie Analytics
+      </h2>
       <p>Total Movies: {totalMovies}</p>
       <p>Average Rating: {averageRating.toFixed(1)}</p>
     </div>

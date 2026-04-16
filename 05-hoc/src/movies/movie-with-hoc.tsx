@@ -1,4 +1,4 @@
-import { withDataFetching } from './hoc/withDataFetching'
+import { withDataFetching } from './hoc/with-data-fetching'
 import MovieAnalytics from './movie-analytics'
 import MovieList from './movie-list'
 
@@ -8,7 +8,7 @@ const MovieAnalyticsWithData = withDataFetching(MovieAnalytics)
 
 export default function MovieWithHOC() {
   return (
-    <div className='max-w-lg mx-auto mt-10 space-y-6'>
+    <div className='max-w-lg mx-auto mt-10 space-y-6 flex  items-center'>
       <MovieListWithData />
       <MovieAnalyticsWithData />
     </div>
