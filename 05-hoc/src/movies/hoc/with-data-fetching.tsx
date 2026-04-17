@@ -44,8 +44,8 @@ export function withDataFetching<P extends WithMovieDataProps>(
       }
     }, [])
 
-    if (loading) return <p className='text-gray-500'>Loading data...</p>
-    if (error) return <p className='text-red-500'>Error: {error}</p>
+    if (loading) return <p className='text-gray-500 p-2'>Loading data...</p>
+    if (error) return <p className='text-red-500 p-2'>Error: {error}</p>
 
     const wrappedProps = { ...props, data } as P
 
