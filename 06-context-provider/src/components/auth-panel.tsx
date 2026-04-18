@@ -12,13 +12,13 @@ export default function AuthPanel(): JSX.Element {
     setForm((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     login(form.username, form.password)
   }
 
   return (
-    <div className='m-2 p-1 rounded'>
+    <div className='m-2 rounded border p-5 max-w-lg w-full'>
       <h2 className='text-3xl my-2'>🧑‍💻 Authentication Panel</h2>
 
       {isAuthenticated ? (

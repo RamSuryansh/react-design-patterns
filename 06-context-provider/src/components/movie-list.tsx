@@ -12,9 +12,9 @@ function MoviesList(): JSX.Element {
   if (error) return <p>Error: {error}</p>
 
   return (
-    <div className='m-2 p-1 rounded'>
-      <h2 className='text-3xl mb-2'>🎬 Movies</h2>
-      <ul>
+    <div className='m-2 p-1 rounded max-w-lg w-full border'>
+      <h2 className='text-3xl mb-2 border-b'>🎬 Movies</h2>
+      <ul className='list-disc pl-5'>
         {data?.movies.map((movie) => (
           <li className='my-2' key={movie.id}>
             {movie.title} — {movie.director}
