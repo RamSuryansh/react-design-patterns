@@ -1,7 +1,10 @@
-import { useFetch } from '../hooks/useFetch'
+import type { JSX } from 'react'
+import { useFetch } from '../hooks/use-fetch'
 
-function MoviesList() {
-  const { data, error, loading } = useFetch(
+type Movie = { id: string | number; title: string; director?: string }
+
+function MoviesList(): JSX.Element {
+  const { data, error, loading } = useFetch<{ movies: Movie[] }>(
     'https://json-faker.onrender.com/movies',
   )
 
@@ -9,7 +12,7 @@ function MoviesList() {
   if (error) return <p>Error: {error}</p>
 
   return (
-    <div className='m-2 p-1 bg-slate-900 rounded'>
+    <div className='m-2 p-1 rounded'>
       <h2 className='text-3xl mb-2'>🎬 Movies</h2>
       <ul>
         {data?.movies.map((movie) => (

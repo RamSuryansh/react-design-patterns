@@ -1,7 +1,13 @@
+import AuthPanel from './components/auth-panel'
+import MoviesList from './components/movie-list'
+import ThemeSwitcher from './components/theme-switcher'
+
 function App() {
   return (
-    <div className='container m-auto p-5'>
-      <h1 className='text-2xl text-blue-500'>Context Provider Pattern</h1>
+    <div className='flex flex-col items-center'>
+      <ThemeSwitcher />
+      <MoviesList />
+      <AuthPanel />
     </div>
   )
 }

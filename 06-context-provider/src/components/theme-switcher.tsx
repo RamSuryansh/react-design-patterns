@@ -1,6 +1,7 @@
+import type { JSX } from 'react'
 import { useToggle } from '../hooks/use-toggle'
 
-function ThemeSwitcher() {
+function ThemeSwitcher(): JSX.Element {
   const [isDark, toggleTheme] = useToggle()
   return (
     <button onClick={toggleTheme}>

@@ -1,27 +1,30 @@
-import { useState } from 'react'
+import { useState, type JSX } from 'react'
 import { useAuth } from '../hooks/use-auth'
 
-export default function AuthPanel() {
-  const { user, login, logout, isAuthenticated } = useAuth()
-  const [form, setForm] = useState({ username: '', password: '' })
+type FormState = { username: string; password: string }
 
-  const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }))
+export default function AuthPanel(): JSX.Element {
+  const { user, login, logout, isAuthenticated } = useAuth()
+  const [form, setForm] = useState<FormState>({ username: '', password: '' })
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setForm((prev) => ({ ...prev, [name]: value }))
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     login(form.username, form.password)
   }
 
   return (
-    <div className='m-2 p-1 bg-slate-900 rounded'>
+    <div className='m-2 p-1 rounded'>
       <h2 className='text-3xl my-2'>🧑‍💻 Authentication Panel</h2>
 
       {isAuthenticated ? (
         <>
           <p>
-            Welcome, <strong>{user}</strong> 🎉
+            Welcome, <strong>{user?.name}</strong> 🎉
           </p>
           <button onClick={logout}>Logout</button>
         </>

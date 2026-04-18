@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react'
 
-export function useFetch(url) {
-  const [data, setData] = useState(null)
-  const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(false)
+type FetchResult<T> = {
+  data: T | null
+  error: string | null
+  loading: boolean
+}
+
+export function useFetch<T = never>(url?: string): FetchResult<T> {
+  const [data, setData] = useState<T | null>(null)
+  const [error, setError] = useState<string | null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     if (!url) return
@@ -13,10 +19,10 @@ export function useFetch(url) {
       try {
         const response = await fetch(url)
         if (!response.ok) throw new Error('Network response was not ok')
-        const result = await response.json()
+        const result = (await response.json()) as T
         setData(result)
       } catch (err) {
-        setError(err.message)
+        setError(err instanceof Error ? err.message : String(err))
       } finally {
         setLoading(false)
       }
