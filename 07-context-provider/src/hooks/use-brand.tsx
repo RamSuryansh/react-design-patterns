@@ -1,8 +1,8 @@
-import { useContext } from 'react'
+import { use } from 'react'
 import { BrandContext } from '../context'
 
 export const useBrand = () => {
-  const { brand, color } = useContext(BrandContext)
+  const { brand, color } = use(BrandContext)
 
   return { brand, color }
 }

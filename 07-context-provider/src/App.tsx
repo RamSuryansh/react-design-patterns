@@ -16,7 +16,7 @@ function App() {
       }}
     >
       <nav className='flex justify-between bg-slate-500 p-1'>
-        <h1 className='text-3xl'>My App</h1>
+        <h1 className='text-3xl text-amber-500'>My App</h1>
         <button onClick={toggleTheme}>Toggle Theme</button>
       </nav>
       <main className='p-4 text-center'>
