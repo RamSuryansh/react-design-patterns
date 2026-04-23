@@ -8,8 +8,8 @@ function App() {
   return (
     <div
       style={{
-        backgroundColor: theme ? '#fff' : '#000',
-        color: theme ? '#000' : '#fff',
+        backgroundColor: theme === 'light' ? '#fff' : '#000',
+        color: theme === 'light' ? '#000' : '#fff',
         height: '100vh',
       }}
     >
@@ -19,7 +19,7 @@ function App() {
       </nav>
       <main className='p-4 text-center'>
         <p className='text-xl m-3'>
-          {theme ? '☀️ Light Mode' : '🌙 Dark Mode'}
+          {theme === 'light' ? '☀️ Light Mode' : '🌙 Dark Mode'}
         </p>
       </main>
     </div>
