@@ -1,7 +1,9 @@
+import { useBrand } from './hooks/use-brand'
 import { useTheme } from './hooks/use-theme'
 
 function App() {
   const { theme, toggleTheme } = useTheme()
+  const { brand, color } = useBrand()
 
   console.log('App rendered', theme)
 
@@ -21,6 +23,7 @@ function App() {
         <p className='text-xl m-3'>
           {theme === 'light' ? '☀️ Light Mode' : '🌙 Dark Mode'}
         </p>
+        My brand:<p className={`text-${color} text-2xl font-bold`}> {brand}</p>
       </main>
     </div>
   )

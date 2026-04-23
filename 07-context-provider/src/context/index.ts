@@ -6,6 +6,10 @@ const ThemeContext = createContext<{
   theme: Theme
   toggleTheme: () => void
 }>({ theme: 'light', toggleTheme: () => {} })
-// const BrandContext = createContext()
 
-export { ThemeContext }
+const BrandContext = createContext<{ brand: string; color: string }>({
+  brand: 'My Brand',
+  color: 'blue-500',
+})
+
+export { BrandContext, ThemeContext }
