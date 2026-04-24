@@ -1,4 +1,4 @@
-import React, { useOptimistic } from 'react'
+import React, { startTransition, useOptimistic } from 'react'
 
 type Props = {
   postId: number
@@ -30,8 +30,7 @@ const LikeButton: React.FC<Props> = ({ initialLikes, postId }) => {
       // If the API call is successful, do nothing as the optimistic update has already updated the UI
     } catch (error) {
       // If the API call fails, revert the optimistic update
-      // addOptimisticLike(-1)
-      setLikes((s) => s)
+      setLikes((pre) => pre)
       console.error('Failed to like the post:', error)
     }
   }
@@ -39,7 +38,7 @@ const LikeButton: React.FC<Props> = ({ initialLikes, postId }) => {
   return (
     <div className='flex items-center'>
       <button
-        onClick={handleLike}
+        onClick={() => startTransition(() => handleLike())}
         className='bg-blue-500 text-white px-2 py-1 rounded'
       >
         Like ❤️
