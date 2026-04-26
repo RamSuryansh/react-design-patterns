@@ -1,11 +1,10 @@
-import LikeButton from './components/like-button'
+import TechFeed from './components/tech-feed/tech-feed'
 
 function App() {
   return (
-    <div className='container p-5'>
-      <h1 className='text-2xl text-blue-500 mb-5'>Optimistic Updates</h1>
-      <LikeButton postId={1} initialLikes={0} />
-    </div>
+    <main className='min-h-screen'>
+      <TechFeed />
+    </main>
   )
 }
 
