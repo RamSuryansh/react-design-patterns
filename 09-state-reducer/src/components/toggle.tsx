@@ -25,7 +25,12 @@ export default function Toggle({
   }
 
   return (
-    <>
+    <div className='inline-block'>
+      <label className='block mb-2 text-sm text-gray-500'>
+        {reducer === toggleReducer
+          ? 'Default Toggle (unlimited clicks)'
+          : 'Custom Toggle (max 3 clicks)'}
+      </label>
       <button
         onClick={handleToggle}
         className={`px-4 py-2 rounded-md text-white cursor-pointer ${
@@ -34,6 +39,6 @@ export default function Toggle({
       >
         {on ? 'ON' : 'OFF'} (Clicks: {clicks})
       </button>
-    </>
+    </div>
   )
 }
