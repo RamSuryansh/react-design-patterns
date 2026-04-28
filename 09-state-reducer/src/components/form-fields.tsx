@@ -1,12 +1,17 @@
+import type { ChangeEvent } from 'react'
 import { useFormContext } from '../provider/form-provider'
+import type { FormFieldName } from '../reducer/form-reducer'
 
 export default function FormFields() {
   const { state, dispatch } = useFormContext()
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     dispatch({
       type: 'CHANGE_FIELD',
-      payload: { name: e.target.name, value: e.target.value },
+      payload: {
+        name: e.target.name as FormFieldName,
+        value: e.target.value,
+      },
     })
   }
 
@@ -27,11 +32,13 @@ export default function FormFields() {
         className='border p-2 rounded'
       />
 
-      {Object.entries(state.errors).map(([field, msg]) => (
-        <p key={field} className='text-red-600 text-sm'>
-          {msg}
-        </p>
-      ))}
+      <ul>
+        {Object.entries(state.errors).map(([field, msg]) => (
+          <li key={field} className='text-red-600 text-sm list-disc ml-5'>
+            {msg}
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

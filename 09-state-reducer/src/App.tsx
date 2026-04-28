@@ -6,8 +6,8 @@ import { customToggleReducer, toggleReducer } from './reducer/toggle'
 
 function App() {
   return (
-    <div className=''>
-      <div className='container m-auto p-5 space-x-10'>
+    <div className='container m-auto p-5 space-y-10'>
+      <div className=' m-auto p-5 space-x-10'>
         <h1 className='text-2xl text-blue-500 mb-5'>
           Reducer pattern: Custom Toggle
         </h1>
@@ -17,7 +17,10 @@ function App() {
         />
         <Toggle reducer={toggleReducer} onToggle={(v) => console.log(v)} />
       </div>
-      <div className='c'>
+      <div className='p-5 space-x-10 max-w-2xl'>
+        <h1 className='text-2xl text-blue-500 mb-5'>
+          Reducer pattern: Custom Form
+        </h1>
         <FormProvider reducer={customFormReducer}>
           <FormFields />
         </FormProvider>

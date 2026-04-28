@@ -1,20 +1,42 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useReducer } from 'react'
-import { defaultFormReducer } from '../reducer/form-reducer'
+import {
+  createContext,
+  useContext,
+  useReducer,
+  type Dispatch,
+  type ReactNode,
+} from 'react'
+import {
+  defaultFormReducer,
+  initialFormState,
+  type FormAction,
+  type FormReducer,
+  type FormState,
+} from '../reducer/form-reducer'
 
-const FormContext = createContext()
+type FormContextValue = {
+  state: FormState
+  dispatch: Dispatch<FormAction>
+}
 
-export function FormProvider({ reducer = defaultFormReducer, children }) {
-  const [state, dispatch] = useReducer(reducer, {
-    values: { name: '', email: '' },
-    errors: {},
-  })
+type FormProviderProps = {
+  reducer?: FormReducer
+  children: ReactNode
+}
+
+const FormContext = createContext<FormContextValue | undefined>(undefined)
+
+export function FormProvider({
+  reducer = defaultFormReducer,
+  children,
+}: FormProviderProps) {
+  const [state, dispatch] = useReducer(reducer, initialFormState)
 
   const value = { state, dispatch }
   return <FormContext value={value}>{children}</FormContext>
 }
 
-export function useFormContext() {
+export function useFormContext(): FormContextValue {
   const context = useContext(FormContext)
   if (!context)
     throw new Error('useFormContext must be used within a FormProvider')

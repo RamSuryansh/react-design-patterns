@@ -1,4 +1,36 @@
-const defaultFormReducer = (state, action) => {
+export type FormFieldName = 'name' | 'email'
+
+export type FormValues = Record<FormFieldName, string>
+
+export type FormErrors = Partial<Record<FormFieldName, string>>
+
+export type FormState = {
+  values: FormValues
+  errors: FormErrors
+}
+
+export type ChangeFieldAction = {
+  type: 'CHANGE_FIELD'
+  payload: {
+    name: FormFieldName
+    value: string
+  }
+}
+
+export type ResetFormAction = {
+  type: 'RESET_FORM'
+}
+
+export type FormAction = ChangeFieldAction | ResetFormAction
+
+export type FormReducer = (state: FormState, action: FormAction) => FormState
+
+export const initialFormState: FormState = {
+  values: { name: '', email: '' },
+  errors: {},
+}
+
+const defaultFormReducer: FormReducer = (state, action) => {
   switch (action.type) {
     case 'CHANGE_FIELD': {
       const { name, value } = action.payload
@@ -19,14 +51,14 @@ const defaultFormReducer = (state, action) => {
     }
 
     case 'RESET_FORM':
-      return { values: {}, errors: {} }
+      return initialFormState
 
     default:
       return state
   }
 }
 
-const customFormReducer = (state, action) => {
+const customFormReducer: FormReducer = (state, action) => {
   switch (action.type) {
     case 'CHANGE_FIELD': {
       const { name, value } = action.payload
