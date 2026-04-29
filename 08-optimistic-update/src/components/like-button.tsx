@@ -21,25 +21,23 @@ const LikeButton: React.FC<Props> = ({ initialLikes, postId }) => {
     (currentLikes: number, nextValue: number) => currentLikes + nextValue,
   )
 
-  const handleLike = async () => {
-    addOptimisticLike(1)
-    try {
-      // Simulate an API call to like the post
-      await sendLikeToServer(postId)
-      setLikes((pre) => pre + 1)
-      // If the API call is successful, do nothing as the optimistic update has already updated the UI
-    } catch (error) {
-      // If the API call fails, revert the optimistic update
-      setLikes((pre) => pre)
-      console.error('Failed to like the post:', error)
-    }
+  const handleLike = () => {
+    startTransition(async () => {
+      addOptimisticLike(1)
+      try {
+        await sendLikeToServer(postId)
+        setLikes((prev) => prev + 1)
+      } catch (error) {
+        console.error('Failed to like the post:', error)
+      }
+    })
   }
 
   return (
     <div className='flex items-center'>
       <button
-        onClick={() => startTransition(() => handleLike())}
-        className='bg-blue-500 text-white px-2 py-1 rounded'
+        onClick={handleLike}
+        className='bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600 transition-colors'
       >
         Like ❤️
       </button>

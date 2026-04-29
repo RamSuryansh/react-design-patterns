@@ -39,8 +39,6 @@ export default function PostCard({ post, initialComments }: Props) {
   const [comments, setComments] = useState(initialComments)
   const [commentInput, setCommentInput] = useState('')
   const [feedback, setFeedback] = useState<string | null>(null)
-  const [isCommenting, setIsCommenting] = useState(false)
-  const [isLiking, setIsLiking] = useState(false)
 
   const [optimisticLikes, addOptimisticLike] = useOptimistic(
     likes,
@@ -55,10 +53,7 @@ export default function PostCard({ post, initialComments }: Props) {
   const commentCount = optimisticComments.length
 
   const handleLike = () => {
-    if (isLiking) return
-
     setFeedback(null)
-    setIsLiking(true)
 
     startTransition(async () => {
       addOptimisticLike(1)
@@ -72,8 +67,6 @@ export default function PostCard({ post, initialComments }: Props) {
             ? error.message
             : 'Unable to process like at the moment.',
         )
-      } finally {
-        setIsLiking(false)
       }
     })
   }
@@ -82,7 +75,7 @@ export default function PostCard({ post, initialComments }: Props) {
     event.preventDefault()
 
     const body = commentInput.trim()
-    if (!body || isCommenting) return
+    if (!body) return
 
     const optimisticEntry: PostComment = {
       id: `temp-${Date.now()}`,
@@ -95,7 +88,6 @@ export default function PostCard({ post, initialComments }: Props) {
 
     setCommentInput('')
     setFeedback(null)
-    setIsCommenting(true)
 
     startTransition(async () => {
       addOptimisticComment(optimisticEntry)
@@ -114,8 +106,6 @@ export default function PostCard({ post, initialComments }: Props) {
             ? error.message
             : 'Unable to publish comment right now.',
         )
-      } finally {
-        setIsCommenting(false)
       }
     })
   }
@@ -151,8 +141,7 @@ export default function PostCard({ post, initialComments }: Props) {
         <button
           type='button'
           onClick={handleLike}
-          disabled={isLiking}
-          className='inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-60'
+          className='inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:bg-slate-100'
         >
           <span aria-hidden='true'>+</span>
           <span>{optimisticLikes} likes</span>
@@ -180,15 +169,14 @@ export default function PostCard({ post, initialComments }: Props) {
             rows={3}
             placeholder='Share your take...'
             className='w-full resize-none rounded-lg border border-transparent bg-white p-3 text-sm text-slate-700 outline-none ring-cyan-500 transition placeholder:text-slate-400 focus:border-slate-200 focus:ring'
-            disabled={isCommenting}
           />
           <div className='mt-3 flex justify-end'>
             <button
               type='submit'
-              disabled={!commentInput.trim() || isCommenting}
+              disabled={!commentInput.trim()}
               className='rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-300'
             >
-              {isCommenting ? 'Posting...' : 'Post comment'}
+              Post comment
             </button>
           </div>
         </div>
@@ -217,7 +205,7 @@ export default function PostCard({ post, initialComments }: Props) {
             >
               <div className='mb-1 flex items-center justify-between text-xs'>
                 <span className='font-semibold uppercase tracking-wide text-slate-600'>
-                  {comment.pending ? 'Sending' : comment.author}
+                  {comment.pending ? 'Sending...' : comment.author}
                 </span>
                 <span className='text-slate-400'>
                   {formatRelativeTime(comment.createdAt)}

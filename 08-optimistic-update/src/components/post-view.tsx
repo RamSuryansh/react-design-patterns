@@ -42,7 +42,7 @@ const PostView: React.FC = () => {
     fetchComments()
   }, [])
 
-  const handleAddComment = async (body: string) => {
+  const handleAddComment = (body: string) => {
     const tempComment: Comment = {
       id: Date.now(), // temporary id
       postId: POST_ID,
@@ -63,7 +63,6 @@ const PostView: React.FC = () => {
         setComments((prev) => [savedComment, ...prev])
       } catch (err) {
         // Optimistic comment is automatically removed when transition ends
-        // Show error message
         setErrorMsg(
           err instanceof Error ? err.message : 'Failed to post comment',
         )
@@ -71,7 +70,7 @@ const PostView: React.FC = () => {
     })
   }
 
-  const handleErrorTest = async () => {
+  const handleErrorTest = () => {
     const tempComment: Comment = {
       id: Date.now(),
       postId: POST_ID,
@@ -91,7 +90,7 @@ const PostView: React.FC = () => {
         await new Promise((_, reject) => {
           setTimeout(
             () => reject(new Error('Simulated error for testing rollback')),
-            8000,
+            2000,
           )
         })
       } catch (err) {
