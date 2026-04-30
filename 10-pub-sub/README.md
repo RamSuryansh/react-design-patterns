@@ -1,73 +1,83 @@
-# React + TypeScript + Vite
+# React Design Patterns: Pub/Sub
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This app demonstrates the publish-subscribe pattern in a React + TypeScript + Vite application. The publisher emits a cart event, the subscriber reacts to that event, and neither component imports or calls the other directly.
 
-Currently, two official plugins are available:
+## Knowledge Base
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+### Pattern Summary
 
-## React Compiler
+Pub/sub is useful when one part of an app needs to announce that something happened, while other parts may respond without creating direct component coupling.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+In this project:
 
-## Expanding the ESLint configuration
+- `AddToCartButton` is the publisher.
+- `CartBadge` is the subscriber.
+- `eventBus` is the in-memory event broker.
+- `BroadcastChannel` mirrors events across browser tabs.
+- `useEvent` connects React components to the event bus with cleanup on unmount.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Source Map
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- `src/types/events.ts`: central TypeScript event contract.
+- `src/libs/event-bus.ts`: typed subscribe and publish API.
+- `src/libs/broadcast.ts`: shared browser channel for cross-tab messages.
+- `src/libs/listener.ts`: receives cross-tab messages and republishes them locally.
+- `src/hooks/use-event.ts`: React hook for subscribing to events.
+- `src/components/pub/add-to-card-btn.tsx`: publishes `cart:add`.
+- `src/components/sub/cart-badge.tsx`: subscribes to `cart:add`.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Event Flow
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. The user clicks `Add to Cart`.
+2. `AddToCartButton` publishes `cart:add` with a cart item payload.
+3. `eventBus` calls every local subscriber for `cart:add`.
+4. `eventBus` also posts the event to `BroadcastChannel`.
+5. Other tabs receive the message in `listener.ts`.
+6. The received event is republished locally with broadcasting disabled to avoid loops.
+7. `CartBadge` updates its local item list and count.
+
+### TypeScript Event Contract
+
+All supported events are defined in `src/types/events.ts`.
+
+```ts
+export type AppEvents = {
+  'cart:add': CartItem
+}
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+This gives compile-time safety to both sides:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- A publisher must send the correct payload for the event name.
+- A subscriber receives the correct payload type for the event name.
+- Unknown event names are rejected by TypeScript.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+To add a new event, add it to `AppEvents` first, then publish or subscribe using that event name.
+
+### Local Development
+
+Install dependencies:
+
+```bash
+pnpm install
 ```
+
+Start the dev server:
+
+```bash
+pnpm dev
+```
+
+Run validation:
+
+```bash
+pnpm lint
+pnpm build
+```
+
+### Design Notes
+
+- Keep event names specific and action-oriented, such as `cart:add` or `user:login`.
+- Keep event payloads small and serializable so cross-tab broadcasting works reliably.
+- Prefer functional state updates in subscribers when the next state depends on the previous state.
+- Use pub/sub for decoupled notifications, not as a replacement for all shared state.
