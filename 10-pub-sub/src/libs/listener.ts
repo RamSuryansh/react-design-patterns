@@ -1,6 +1,6 @@
+import type { AppEventMessage } from '../types/events'
 import { crossTabChannel } from './broadcast'
 import { eventBus } from './event-bus'
-import type { AppEventMessage } from '../types/events'
 
 crossTabChannel.onmessage = ({ data }) => {
   const message = data as AppEventMessage

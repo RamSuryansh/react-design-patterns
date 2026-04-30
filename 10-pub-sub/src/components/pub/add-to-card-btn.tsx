@@ -25,11 +25,12 @@ export default function AddToCartButton() {
   }
 
   return (
-    <div className='flex space-x-2 border rounded border-gray-600 p-2 m-3'>
-      <h2 className='text-2xl'>Publisher</h2>
+    <div className='rounded-md border border-slate-200 bg-slate-50 p-4'>
+      <h3 className='text-lg font-semibold text-slate-900'>Publisher</h3>
       <button
-        className='bg-emerald-500 rounded p-1 cursor-pointer'
+        className='mt-4 rounded-md bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700'
         onClick={handleClick}
+        type='button'
       >
         Add to Cart
       </button>

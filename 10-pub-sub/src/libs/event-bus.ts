@@ -1,5 +1,5 @@
-import { crossTabChannel } from './broadcast'
 import type { AppEventMessage, AppEventName, AppEvents } from '../types/events'
+import { crossTabChannel } from './broadcast'
 
 type EventHandler<EventName extends AppEventName> = (
   payload: AppEvents[EventName],
@@ -25,14 +25,10 @@ export const eventBus: EventBus = {
       listeners.set(eventName, new Set())
     }
 
-    listeners
-      .get(eventName)
-      ?.add(handler as EventHandler<AppEventName>)
+    listeners.get(eventName)?.add(handler as EventHandler<AppEventName>)
 
     return () => {
-      listeners
-        .get(eventName)
-        ?.delete(handler as EventHandler<AppEventName>)
+      listeners.get(eventName)?.delete(handler as EventHandler<AppEventName>)
     }
   },
 

@@ -10,12 +10,14 @@ export default function CartBadge() {
   })
 
   return (
-    <div className='flex flex-col text-center'>
-      <h2 className='text-2xl'>Subscriber</h2>
-      <p className='text-4xl text-center'>🛒 {items.length}</p>
-      <ul className='list-none'>
+    <div className='rounded-md border border-slate-200 bg-slate-50 p-4'>
+      <h3 className='text-lg font-semibold text-slate-900'>Subscriber</h3>
+      <p className='mt-4 text-4xl'>Cart: {items.length}</p>
+      <ul className='mt-4 space-y-2 text-sm text-slate-600'>
         {items.map((item) => (
-          <li key={item.id}>{item.name}</li>
+          <li className='rounded bg-white px-3 py-2' key={item.id}>
+            {item.name}
+          </li>
         ))}
       </ul>
     </div>
