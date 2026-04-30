@@ -1,40 +1,51 @@
-// eventBus.js
-// -------------------------------
-// A simple Pub-Sub implementation
-// using a Map of event names → Set of handlers
-// -------------------------------
-
 import { crossTabChannel } from './broadcast'
+import type { AppEventMessage, AppEventName, AppEvents } from '../types/events'
 
-// Map that stores: eventName -> Set of subscriber functions
-const listeners = new Map()
+type EventHandler<EventName extends AppEventName> = (
+  payload: AppEvents[EventName],
+) => void
 
-export const eventBus = {
-  // ---- SUBSCRIBE to an event ----
+type EventBus = {
+  subscribe<EventName extends AppEventName>(
+    eventName: EventName,
+    handler: EventHandler<EventName>,
+  ): () => void
+  publish<EventName extends AppEventName>(
+    eventName: EventName,
+    payload: AppEvents[EventName],
+    options?: { broadcast?: boolean },
+  ): void
+}
+
+const listeners = new Map<AppEventName, Set<EventHandler<AppEventName>>>()
+
+export const eventBus: EventBus = {
   subscribe(eventName, handler) {
-    // If the event is new, create its Set
     if (!listeners.has(eventName)) {
       listeners.set(eventName, new Set())
     }
 
-    // Add handler to the event’s listener set
-    listeners.get(eventName).add(handler)
+    listeners
+      .get(eventName)
+      ?.add(handler as EventHandler<AppEventName>)
 
-    // Return an UNsubscribe function
     return () => {
-      listeners.get(eventName)?.delete(handler)
+      listeners
+        .get(eventName)
+        ?.delete(handler as EventHandler<AppEventName>)
     }
   },
 
-  // ---- PUBLISH / EMIT an event ----
   publish(eventName, payload, { broadcast = true } = {}) {
-    // If the event has subscribers, call them
     listeners.get(eventName)?.forEach((handler) => {
       handler(payload)
     })
-    // Broadcast to other tabs (avoid infinite loops)
+
     if (broadcast) {
-      crossTabChannel.postMessage({ eventName, payload })
+      crossTabChannel.postMessage({
+        eventName,
+        payload,
+      } satisfies AppEventMessage<typeof eventName>)
     }
   },
 }

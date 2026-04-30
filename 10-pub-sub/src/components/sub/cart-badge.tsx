@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useEvent } from '../../hooks/use-event'
+import type { CartItem } from '../../types/events'
 
 export default function CartBadge() {
-  const [items, setItems] = useState([])
+  const [items, setItems] = useState<CartItem[]>([])
 
   useEvent('cart:add', (data) => {
-    console.log(data)
-    setItems([...items, data])
+    setItems((currentItems) => [...currentItems, data])
   })
 
   return (

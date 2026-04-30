@@ -1,6 +1,7 @@
 import { eventBus } from '../../libs/event-bus'
+import type { CartItem } from '../../types/events'
 
-const products = [
+const products: CartItem[] = [
   { id: crypto.randomUUID(), name: 'Soap' },
   { id: crypto.randomUUID(), name: 'Towel' },
   { id: crypto.randomUUID(), name: 'Bed' },
@@ -12,6 +13,11 @@ export default function AddToCartButton() {
   const handleClick = () => {
     const randomIndex = Math.floor(Math.random() * products.length)
     const selectedProduct = products[randomIndex]
+
+    if (!selectedProduct) {
+      return
+    }
+
     eventBus.publish('cart:add', {
       id: selectedProduct.id,
       name: selectedProduct.name,
