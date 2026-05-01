@@ -11,7 +11,7 @@ const MemoizedProfileTracker = () => {
         value={value}
         onChange={(e) => setValue(e.target.value)}
       />
-      <MemoizedCard name='Tapas' />
+      <MemoizedCard name='Suryansh' />
     </div>
   )
 }
