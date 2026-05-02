@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { memo, useMemo } from 'react'
 
 function Users({ list }: { list: string[] }) {
   console.log('Users component rendered')
@@ -22,4 +22,4 @@ function Users({ list }: { list: string[] }) {
   )
 }
 
-export default Users
+export default memo(Users)
