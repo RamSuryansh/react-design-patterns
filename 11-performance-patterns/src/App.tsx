@@ -1,5 +1,6 @@
 import SearchDemo from './performance/debouncing/search-demo'
-import WithoutLazyLoading from './performance/lazy-loading/without-lazy-loading'
+import WithLazyLoading from './performance/lazy-loading/with-lazy-loading'
+// import WithoutLazyLoading from './performance/lazy-loading/without-lazy-loading'
 import MemoizedProfileTracker from './performance/memoization/memo/memoized-profile-tracker'
 import CallbackParent from './performance/memoization/use-callback/parent'
 import UsersSortingWithUseMemo from './performance/memoization/use-memo/user-sorting'
@@ -35,7 +36,8 @@ function App() {
       </div>
       <div className='container p-5'>
         <h1 className='text-2xl text-green-500'>Lazy Loading</h1>
-        <WithoutLazyLoading />
+        {/* <WithoutLazyLoading /> */}
+        <WithLazyLoading />
       </div>
     </div>
   )
