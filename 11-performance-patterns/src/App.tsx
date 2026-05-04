@@ -5,8 +5,12 @@ import MemoizedProfileTracker from './performance/memoization/memo/memoized-prof
 import CallbackParent from './performance/memoization/use-callback/parent'
 import UsersSortingWithUseMemo from './performance/memoization/use-memo/user-sorting'
 import ScrollTracker from './performance/throttling/scroll-tracker'
+import { useFakeUsers } from './performance/virtualization/data'
+import NonVirtualList from './performance/virtualization/non-virtual-list'
 
 function App() {
+  const users = useFakeUsers() // Generate 50k users for virtualization demo
+
   return (
     <div className='flex flex-col md:flex-row'>
       <div className='container p-5'>
@@ -38,6 +42,13 @@ function App() {
         <h1 className='text-2xl text-green-500'>Lazy Loading</h1>
         {/* <WithoutLazyLoading /> */}
         <WithLazyLoading />
+        <h1 className='text-2xl text-blue-500 mt-5 '>
+          Virtualization VS Non-Virtualization
+        </h1>
+        <div className='border rounded p-2'>
+          <h1 className='text-blue-500'>Non-Virtualization</h1>
+          <NonVirtualList users={users} />
+        </div>
       </div>
     </div>
   )
